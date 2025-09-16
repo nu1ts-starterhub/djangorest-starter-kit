@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# SECURITY
+AUTH_USER_MODEL = "auth_app.User"
+
 
 # Application definition
 
@@ -39,8 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
-    "drf_yasg",
+    'rest_framework',
+    'drf_yasg',
+    'apps.auth_app',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +56,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 ROOT_URLCONF = 'config.urls'
 
@@ -72,6 +82,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+
+# Swagger
+SWAGGER_SETTINGS = {
+    'DEFAULT_MODEL_RENDERING' : 'example',
+}
 
 
 # Database
