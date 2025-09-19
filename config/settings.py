@@ -29,9 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# SECURITY
+AUTH_USER_MODEL = 'auth_app.User'
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
-    "drf_yasg",
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'drf_yasg',
+    'apps.auth_app',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +57,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
 
 ROOT_URLCONF = 'config.urls'
 
@@ -72,6 +86,25 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+
+# Swagger
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'DEFAULT_MODEL_RENDERING' : 'example',
+    'DISPLAY_OPERATION_ID' : False,
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomAutoSchema',
+    'OPERATIONS_SORTER' : 'method',
+    'TAGS_SORTER' : 'alpha',
+}
 
 
 # Database
