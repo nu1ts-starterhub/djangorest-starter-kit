@@ -9,7 +9,7 @@ password_validator = RegexValidator(
     message="Password must be at least 8 characters long, include at least one letter and one number"
 )
 
-class RegisterSerializer(serializers.ModelSerializer):
+class RegisterRequestSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         validators=[password_validator],
@@ -28,3 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+class LoginRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})

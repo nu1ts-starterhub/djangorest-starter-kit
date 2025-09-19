@@ -102,6 +102,8 @@ SWAGGER_SETTINGS = {
     'DEFAULT_MODEL_RENDERING' : 'example',
     'DISPLAY_OPERATION_ID' : False,
     'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomAutoSchema',
+    'OPERATIONS_SORTER' : 'method',
+    'TAGS_SORTER' : 'alpha',
 }
 
 
