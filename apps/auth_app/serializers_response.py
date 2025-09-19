@@ -8,6 +8,9 @@ class LoginResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
 
+class RefreshResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+
 class ErrorResponseSerializer(serializers.Serializer):
     timestamp = serializers.DateTimeField()
     status = serializers.IntegerField()

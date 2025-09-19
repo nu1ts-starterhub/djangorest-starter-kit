@@ -32,3 +32,9 @@ class RegisterRequestSerializer(serializers.ModelSerializer):
 class LoginRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+
+class RefreshRequestSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+class LogoutRequestSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
