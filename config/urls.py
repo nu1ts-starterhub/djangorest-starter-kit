@@ -29,10 +29,10 @@ schema_view = get_schema_view(
     openapi.Info(
         title=f"{PROJECT_NAME} API",
         default_version='v1',
-        description=f"Документация REST API для проекта {PROJECT_NAME}",
+        description=f"API docs for {PROJECT_NAME}.\n\n"
+                    f"<a href='/admin/' target='_blank'>➡️ Go to Django Admin</a>",
     ),
     public=True,
-    permission_classes=[permissions.AllowAny,],
 )
 
 urlpatterns = [

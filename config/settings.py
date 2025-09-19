@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # SECURITY
-AUTH_USER_MODEL = "auth_app.User"
+AUTH_USER_MODEL = 'auth_app.User'
 
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_yasg',
     'apps.auth_app',
 ]
@@ -58,9 +59,12 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
 ROOT_URLCONF = 'config.urls'
@@ -86,7 +90,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Swagger
 SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+        }
+    },
+    'USE_SESSION_AUTH': False,
     'DEFAULT_MODEL_RENDERING' : 'example',
+    'DISPLAY_OPERATION_ID' : False,
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomAutoSchema',
 }
 
 
