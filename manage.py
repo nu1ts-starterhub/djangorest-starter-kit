@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import sys
 import subprocess
@@ -39,8 +38,10 @@ def init_superuser():
 def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
+    DEBUG = os.environ.get("DEBUG", "True").lower() in ["1", "true", "yes"]
     runserver_related = len(sys.argv) > 1 and sys.argv[1] in ["runserver", "migrate", "shell"]
-    if runserver_related:
+
+    if runserver_related and DEBUG:
         if os.environ.get("RUN_MAIN") or sys.argv[1] != "runserver":
             start_docker_compose()
             atexit.register(stop_docker_compose)
@@ -54,12 +55,13 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    if len(sys.argv) > 1 and sys.argv[1] == "runserver" and os.environ.get("RUN_MAIN"):
-        print("💾 Setting up Django...")
-        django.setup()
-        print("💾 Applying migrations automatically...")
-        call_command("migrate", interactive=False)
-        init_superuser()
+    print("💾 Setting up Django...")
+    django.setup()
+    print("💾 Applying migrations automatically...")
+    call_command("migrate", interactive=False)
+
+    print("💻 Checking/creating superuser...")
+    init_superuser()
 
     execute_from_command_line(sys.argv)
 
