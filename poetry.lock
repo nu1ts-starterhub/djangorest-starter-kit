@@ -32,14 +32,14 @@ Django = ">=4.2"
 
 [[package]]
 name = "django"
-version = "5.2.6"
+version = "5.2.7"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "django-5.2.6-py3-none-any.whl", hash = "sha256:60549579b1174a304b77e24a93d8d9fafe6b6c03ac16311f3e25918ea5a20058"},
-    {file = "django-5.2.6.tar.gz", hash = "sha256:da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b"},
+    {file = "django-5.2.7-py3-none-any.whl", hash = "sha256:59a13a6515f787dec9d97a0438cd2efac78c8aca1c80025244b0fe507fe0754b"},
+    {file = "django-5.2.7.tar.gz", hash = "sha256:e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd"},
 ]
 
 [package.dependencies]
@@ -93,19 +93,19 @@ test = ["cryptography", "freezegun", "pytest", "pytest-cov", "pytest-django", "p
 
 [[package]]
 name = "drf-yasg"
-version = "1.21.10"
+version = "1.21.11"
 description = "Automated generation of real Swagger/OpenAPI 2.0 schemas from Django Rest Framework code."
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "drf-yasg-1.21.10.tar.gz", hash = "sha256:f86d50faee3c31fcec4545985a871f832366c7fb5b77b62c48089d56ecf4f8d4"},
-    {file = "drf_yasg-1.21.10-py3-none-any.whl", hash = "sha256:4d832e108dfe38e365101c36123576b498487d33bf27d57d6a37efb4cc773438"},
+    {file = "drf_yasg-1.21.11-py3-none-any.whl", hash = "sha256:ec741f313b3b5f0b5fc8c1e1b6ed323c34f1f492a41fe7cc7421d8c6de9753e4"},
+    {file = "drf_yasg-1.21.11.tar.gz", hash = "sha256:0190b3de884aa593a39c75e6daba2ae69f285f0691de1eb0e3f4c6307faa1817"},
 ]
 
 [package.dependencies]
-django = ">=2.2.16"
-djangorestframework = ">=3.10.3"
+django = ">=4.0"
+djangorestframework = ">=3.13"
 inflection = ">=0.3.1"
 packaging = ">=21.0"
 pytz = ">=2021.1"
@@ -138,6 +138,18 @@ groups = ["main"]
 files = [
     {file = "packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484"},
     {file = "packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"},
+]
+
+[[package]]
+name = "poetry-core"
+version = "2.2.1"
+description = "Poetry PEP 517 Build Backend"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "poetry_core-2.2.1-py3-none-any.whl", hash = "sha256:bdfce710edc10bfcf9ab35041605c480829be4ab23f5bc01202cfe5db8f125ab"},
+    {file = "poetry_core-2.2.1.tar.gz", hash = "sha256:97e50d8593c8729d3f49364b428583e044087ee3def1e010c6496db76bd65ac5"},
 ]
 
 [[package]]
@@ -366,5 +378,5 @@ files = [
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.12"
-content-hash = "87204cf84c1d669f75c113e40aeb5e8cbbe9aab676ea17e4a3839d2f64812880"
+python-versions = ">=3.12,<4.0"
+content-hash = "0ed0e7d70a8aeaf7ce30dbb6acb63ffae2dd1cce362ed2102cf80f4bfbe71f75"
