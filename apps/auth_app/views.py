@@ -224,7 +224,7 @@ class LogoutView(ErrorResponseMixin, APIView):
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         except TokenError:
             return ErrorResponseMixin.format_error(
                 request,

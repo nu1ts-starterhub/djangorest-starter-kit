@@ -43,7 +43,7 @@ def init_superuser():
     admin_password = os.environ.get("DJANGO_ADMIN_PASSWORD", "admin123")
 
     if not user.objects.filter(username=admin_username).exists():
-        user.objects.create_superuser(
+        user.objects.create_superuser( # type: ignore[attr-defined]
             username=admin_username,
             email=admin_email,
             password=admin_password
