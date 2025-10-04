@@ -2,20 +2,37 @@ import os
 import sys
 import subprocess
 import atexit
+import time
 import django
+from django.db import connections
+from django.db.utils import OperationalError
+
 
 def start_docker_compose():
-    print("🚀 Starting all docker-compose services...")
-    subprocess.run(["docker", "compose", "up", "-d"], check=True)
+    print("🚀 Starting docker-compose services...")
+    subprocess.run(["docker", "compose", "up", "-d", "postgres"], check=True)
     print("✅ All services started.")
 
 def stop_docker_compose():
-    print("🛑 Stopping all docker-compose services...")
+    print("🛑 Stopping docker-compose services...")
     try:
         subprocess.run(["docker", "compose", "stop"], check=True)
-        print("✅ All services stopped.")
+        print("✅ Services stopped.")
     except subprocess.CalledProcessError:
         print("⚠️ Failed to stop services.")
+
+
+def wait_for_db():
+    print("⏳ Waiting for database to become available...")
+    for i in range(20):
+        try:
+            connections["default"].cursor()
+            print("✅ Database is ready!")
+            return
+        except OperationalError:
+            time.sleep(1)
+    raise RuntimeError("❌ Database not ready after waiting 20 seconds.")
+
 
 def init_superuser():
     from django.contrib.auth import get_user_model
@@ -41,22 +58,21 @@ def main():
     DEBUG = os.environ.get("DEBUG", "True").lower() in ["1", "true", "yes"]
     runserver_related = len(sys.argv) > 1 and sys.argv[1] in ["runserver", "migrate", "shell"]
 
-    if runserver_related and DEBUG:
-        if os.environ.get("RUN_MAIN") or sys.argv[1] != "runserver":
-            start_docker_compose()
-            atexit.register(stop_docker_compose)
-
     try:
         from django.core.management import execute_from_command_line, call_command
     except ImportError as exc:
         raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
+            "Couldn't import Django. Make sure it's installed and available on your PYTHONPATH."
         ) from exc
 
     print("💾 Setting up Django...")
     django.setup()
+
+    if runserver_related and DEBUG:
+        start_docker_compose()
+        atexit.register(stop_docker_compose)
+        wait_for_db()
+
     print("💾 Applying migrations automatically...")
     call_command("migrate", interactive=False)
 
@@ -64,6 +80,7 @@ def main():
     init_superuser()
 
     execute_from_command_line(sys.argv)
+
 
 if __name__ == "__main__":
     main()
