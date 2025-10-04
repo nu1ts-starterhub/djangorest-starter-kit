@@ -29,12 +29,26 @@ class RegisterRequestSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class RegisterResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
+
 class LoginRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
+class LoginResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
+
 class RefreshRequestSerializer(serializers.Serializer):
     refresh = serializers.CharField()
+
+class RefreshResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+
 
 class LogoutRequestSerializer(serializers.Serializer):
     refresh = serializers.CharField()
