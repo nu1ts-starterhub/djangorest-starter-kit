@@ -11,9 +11,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.auth_app.serializers import RegisterRequestSerializer, LoginRequestSerializer, RefreshRequestSerializer, \
     LogoutRequestSerializer
-from apps.auth_app.serializers_response import RegisterResponseSerializer, ErrorResponseSerializer, \
+from apps.auth_app.serializers import RegisterResponseSerializer, \
     LoginResponseSerializer, RefreshResponseSerializer
 from core.mixins import ErrorResponseMixin
+from core.serializers import ErrorResponseSerializer
 
 User = get_user_model()
 
@@ -223,7 +224,7 @@ class LogoutView(ErrorResponseMixin, APIView):
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         except TokenError:
             return ErrorResponseMixin.format_error(
                 request,

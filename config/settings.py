@@ -9,10 +9,9 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-import os
 from pathlib import Path
 
-import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +21,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hmdjttbm9-tgx#uk914354-e*iz4-r-0gd7b#h10j=3-+ea_he'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-hmdjttbm9-tgx#uk914354-e*iz4-r-0gd7b#h10j=3-+ea_he')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = ["yourdomain.com"]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:8000',
+#     'http://127.0.0.1:8000',
+# ]
+# 
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8000',
+#     'http://127.0.0.1:8000',
+# ]
+
+# CORS_ALLOW_ALL_ORIGINS = True
 
 # SECURITY
 AUTH_USER_MODEL = 'auth_app.User'
@@ -46,6 +64,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
     'apps.auth_app',
+    # 'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -65,6 +85,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'EXCEPTION_HANDLER': 'core.exceptions.custom_exception_handler',
 }
 
 ROOT_URLCONF = 'config.urls'
@@ -104,6 +125,7 @@ SWAGGER_SETTINGS = {
     'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomAutoSchema',
     'OPERATIONS_SORTER' : 'method',
     'TAGS_SORTER' : 'alpha',
+    "DEFAULT_API_URL": "http://127.0.0.1:8000",
 }
 
 
@@ -111,10 +133,14 @@ SWAGGER_SETTINGS = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/postgres"),
-        conn_max_age=600,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME', default='postgres'),
+        'USER': config('DB_USER', default='postgres'),
+        'PASSWORD': config('DB_PASSWORD', default='postgres'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
+    }
 }
 
 
@@ -152,7 +178,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+if DEBUG:
+    STATIC_ROOT = BASE_DIR / "vol/web/static"
+else:
+    STATIC_ROOT = '/vol/web/static'
+
+MEDIA_URL = "/media/"
+if DEBUG:
+    MEDIA_ROOT = BASE_DIR / "vol/web/media"
+else:
+    MEDIA_ROOT = "/vol/web/media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
